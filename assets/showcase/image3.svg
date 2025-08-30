@@ -1,0 +1,59 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Abstract AI art -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ef4444" />
+    </linearGradient>
+    <radialGradient id="center" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#4c1d95" opacity="0" />
+    </radialGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="noise" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bg)" />
+  
+  <!-- Abstract shapes -->
+  <g filter="url(#noise)">
+    <!-- Central glow -->
+    <circle cx="400" cy="300" r="200" fill="url(#center)" opacity="0.7" filter="url(#blur)" />
+    
+    <!-- Flowing lines -->
+    <path d="M200,100 C300,200 500,150 600,250 S700,400 600,500" stroke="white" stroke-width="3" fill="none" opacity="0.6" />
+    <path d="M150,300 C250,250 350,350 450,300 S550,200 650,250" stroke="#22d3ee" stroke-width="2" fill="none" opacity="0.8" />
+    <path d="M200,500 C300,450 400,500 500,450 S600,400 700,450" stroke="#7c3aed" stroke-width="4" fill="none" opacity="0.7" />
+    
+    <!-- Geometric elements -->
+    <polygon points="400,150 450,250 350,250" fill="white" opacity="0.5" />
+    <rect x="300" y="350" width="200" height="100" rx="20" fill="white" opacity="0.3" />
+    <circle cx="250" cy="200" r="30" fill="#22d3ee" opacity="0.6" />
+    <circle cx="550" cy="400" r="40" fill="#7c3aed" opacity="0.5" />
+    
+    <!-- Particles -->
+    <g>
+      <circle cx="150" cy="150" r="5" fill="white" opacity="0.8" />
+      <circle cx="650" cy="150" r="3" fill="white" opacity="0.6" />
+      <circle cx="200" cy="400" r="4" fill="white" opacity="0.7" />
+      <circle cx="600" cy="350" r="6" fill="white" opacity="0.5" />
+      <circle cx="300" cy="500" r="3" fill="white" opacity="0.6" />
+      <circle cx="500" cy="100" r="5" fill="white" opacity="0.7" />
+      <circle cx="400" cy="400" r="4" fill="white" opacity="0.8" />
+      <circle cx="350" cy="200" r="3" fill="white" opacity="0.5" />
+      <circle cx="450" cy="300" r="5" fill="white" opacity="0.6" />
+      <circle cx="250" cy="350" r="4" fill="white" opacity="0.7" />
+      <circle cx="550" cy="250" r="3" fill="white" opacity="0.8" />
+    </g>
+  </g>
+  
+  <!-- Overlay texture -->
+  <rect width="800" height="600" fill="url(#noise)" opacity="0.05" />
+</svg>

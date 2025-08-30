@@ -1,0 +1,118 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sci-fi cityscape -->
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="city-glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="window-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#sky)" />
+  
+  <!-- Stars -->
+  <g>
+    <circle cx="100" cy="80" r="1" fill="white" opacity="0.8" />
+    <circle cx="200" cy="50" r="1.2" fill="white" opacity="0.6" />
+    <circle cx="300" cy="100" r="0.8" fill="white" opacity="0.7" />
+    <circle cx="400" cy="70" r="1" fill="white" opacity="0.5" />
+    <circle cx="500" cy="120" r="1.3" fill="white" opacity="0.8" />
+    <circle cx="600" cy="60" r="0.9" fill="white" opacity="0.7" />
+    <circle cx="700" cy="90" r="1.1" fill="white" opacity="0.9" />
+    <circle cx="150" cy="150" r="1" fill="white" opacity="0.6" />
+    <circle cx="250" cy="180" r="0.7" fill="white" opacity="0.7" />
+    <circle cx="350" cy="130" r="1.2" fill="white" opacity="0.8" />
+    <circle cx="450" cy="160" r="0.8" fill="white" opacity="0.7" />
+    <circle cx="550" cy="140" r="1" fill="white" opacity="0.5" />
+    <circle cx="650" cy="170" r="0.9" fill="white" opacity="0.8" />
+  </g>
+  
+  <!-- City skyline -->
+  <g filter="url(#glow)">
+    <!-- Buildings -->
+    <rect x="50" y="250" width="60" height="350" fill="#0f172a" />
+    <rect x="120" y="200" width="80" height="400" fill="#0f172a" />
+    <rect x="210" y="300" width="40" height="300" fill="#0f172a" />
+    <rect x="260" y="150" width="100" height="450" fill="#0f172a" />
+    <rect x="370" y="100" width="60" height="500" fill="#0f172a" />
+    <rect x="440" y="200" width="70" height="400" fill="#0f172a" />
+    <rect x="520" y="250" width="50" height="350" fill="#0f172a" />
+    <rect x="580" y="180" width="90" height="420" fill="#0f172a" />
+    <rect x="680" y="220" width="70" height="380" fill="#0f172a" />
+    
+    <!-- Central tower -->
+    <rect x="350" y="50" width="100" height="550" fill="#0f172a" />
+    <polygon points="350,50 400,0 450,50" fill="#0f172a" />
+    <rect x="390" y="10" width="20" height="40" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+    
+    <!-- Building details -->
+    <rect x="370" y="100" width="60" height="10" fill="url(#city-glow)" opacity="0.8" />
+    <rect x="370" y="200" width="60" height="10" fill="url(#city-glow)" opacity="0.8" />
+    <rect x="370" y="300" width="60" height="10" fill="url(#city-glow)" opacity="0.8" />
+    <rect x="370" y="400" width="60" height="10" fill="url(#city-glow)" opacity="0.8" />
+    <rect x="370" y="500" width="60" height="10" fill="url(#city-glow)" opacity="0.8" />
+  </g>
+  
+  <!-- Windows -->
+  <g>
+    <!-- Building 1 -->
+    <g transform="translate(60, 280)">
+      <rect x="0" y="0" width="5" height="8" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+      <rect x="15" y="0" width="5" height="8" fill="#10b981" opacity="0.6" filter="url(#window-glow)" />
+      <rect x="30" y="0" width="5" height="8" fill="#10b981" opacity="0.7" filter="url(#window-glow)" />
+      <rect x="0" y="20" width="5" height="8" fill="#10b981" opacity="0.5" filter="url(#window-glow)" />
+      <rect x="15" y="20" width="5" height="8" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+      <rect x="30" y="20" width="5" height="8" fill="#10b981" opacity="0.6" filter="url(#window-glow)" />
+      <rect x="0" y="40" width="5" height="8" fill="#10b981" opacity="0.7" filter="url(#window-glow)" />
+      <rect x="15" y="40" width="5" height="8" fill="#10b981" opacity="0.5" filter="url(#window-glow)" />
+      <rect x="30" y="40" width="5" height="8" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+    </g>
+    
+    <!-- Building 2 -->
+    <g transform="translate(140, 220)">
+      <rect x="0" y="0" width="5" height="8" fill="#3b82f6" opacity="0.8" filter="url(#window-glow)" />
+      <rect x="20" y="0" width="5" height="8" fill="#3b82f6" opacity="0.6" filter="url(#window-glow)" />
+      <rect x="40" y="0" width="5" height="8" fill="#3b82f6" opacity="0.7" filter="url(#window-glow)" />
+      <rect x="0" y="30" width="5" height="8" fill="#3b82f6" opacity="0.5" filter="url(#window-glow)" />
+      <rect x="20" y="30" width="5" height="8" fill="#3b82f6" opacity="0.8" filter="url(#window-glow)" />
+      <rect x="40" y="30" width="5" height="8" fill="#3b82f6" opacity="0.6" filter="url(#window-glow)" />
+      <rect x="0" y="60" width="5" height="8" fill="#3b82f6" opacity="0.7" filter="url(#window-glow)" />
+      <rect x="20" y="60" width="5" height="8" fill="#3b82f6" opacity="0.5" filter="url(#window-glow)" />
+      <rect x="40" y="60" width="5" height="8" fill="#3b82f6" opacity="0.8" filter="url(#window-glow)" />
+    </g>
+    
+    <!-- Central tower windows -->
+    <g transform="translate(370, 120)">
+      <rect x="0" y="0" width="10" height="15" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+      <rect x="25" y="0" width="10" height="15" fill="#10b981" opacity="0.7" filter="url(#window-glow)" />
+      <rect x="50" y="0" width="10" height="15" fill="#10b981" opacity="0.9" filter="url(#window-glow)" />
+      
+      <rect x="0" y="40" width="10" height="15" fill="#10b981" opacity="0.7" filter="url(#window-glow)" />
+      <rect x="25" y="40" width="10" height="15" fill="#10b981" opacity="0.9" filter="url(#window-glow)" />
+      <rect x="50" y="40" width="10" height="15" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+      
+      <rect x="0" y="80" width="10" height="15" fill="#10b981" opacity="0.9" filter="url(#window-glow)" />
+      <rect x="25" y="80" width="10" height="15" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+      <rect x="50" y="80" width="10" height="15" fill="#10b981" opacity="0.7" filter="url(#window-glow)" />
+    </g>
+  </g>
+  
+  <!-- Flying vehicles -->
+  <g>
+    <path d="M150,200 L170,190 L190,200 L170,210 Z" fill="#3b82f6" opacity="0.8" filter="url(#window-glow)" />
+    <path d="M600,150 L620,140 L640,150 L620,160 Z" fill="#10b981" opacity="0.8" filter="url(#window-glow)" />
+    <path d="M300,250 L320,240 L340,250 L320,260 Z" fill="#3b82f6" opacity="0.8" filter="url(#window-glow)" />
+  </g>
+</svg>

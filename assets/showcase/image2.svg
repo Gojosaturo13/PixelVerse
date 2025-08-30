@@ -1,0 +1,66 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Portrait artwork -->
+  <defs>
+    <linearGradient id="background" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <radialGradient id="face" cx="50%" cy="40%" r="30%" fx="50%" fy="40%">
+      <stop offset="0%" stop-color="#fde68a" />
+      <stop offset="100%" stop-color="#d97706" />
+    </radialGradient>
+    <linearGradient id="hair" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#4c1d95" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#background)" />
+  
+  <!-- Abstract shapes -->
+  <circle cx="400" cy="300" r="250" fill="rgba(255,255,255,0.1)" />
+  <circle cx="400" cy="300" r="200" fill="rgba(255,255,255,0.1)" />
+  <circle cx="400" cy="300" r="150" fill="rgba(255,255,255,0.1)" />
+  
+  <!-- Face outline -->
+  <ellipse cx="400" cy="300" rx="120" ry="150" fill="url(#face)" filter="url(#glow)" />
+  
+  <!-- Hair -->
+  <path d="M280,300 C280,200 520,200 520,300 L520,200 C520,150 280,150 280,200 Z" fill="url(#hair)" />
+  
+  <!-- Eyes -->
+  <g transform="translate(400, 280)">
+    <!-- Left eye -->
+    <ellipse cx="-40" cy="0" rx="15" ry="8" fill="white" />
+    <circle cx="-40" cy="0" r="5" fill="#1e40af" />
+    <circle cx="-42" cy="-2" r="2" fill="white" />
+    
+    <!-- Right eye -->
+    <ellipse cx="40" cy="0" rx="15" ry="8" fill="white" />
+    <circle cx="40" cy="0" r="5" fill="#1e40af" />
+    <circle cx="38" cy="-2" r="2" fill="white" />
+    
+    <!-- Eyebrows -->
+    <path d="M-55,-15 Q-40,-25 -25,-15" stroke="#4c1d95" stroke-width="3" fill="none" />
+    <path d="M25,-15 Q40,-25 55,-15" stroke="#4c1d95" stroke-width="3" fill="none" />
+  </g>
+  
+  <!-- Nose -->
+  <path d="M400,280 Q410,320 400,330" stroke="#d97706" stroke-width="2" fill="none" />
+  
+  <!-- Mouth -->
+  <path d="M370,350 Q400,370 430,350" stroke="#be123c" stroke-width="3" fill="none" />
+  
+  <!-- Glowing elements -->
+  <circle cx="300" cy="150" r="5" fill="white" filter="url(#glow)" />
+  <circle cx="500" cy="150" r="5" fill="white" filter="url(#glow)" />
+  <circle cx="200" cy="300" r="3" fill="white" filter="url(#glow)" />
+  <circle cx="600" cy="300" r="3" fill="white" filter="url(#glow)" />
+  <circle cx="300" cy="450" r="4" fill="white" filter="url(#glow)" />
+  <circle cx="500" cy="450" r="4" fill="white" filter="url(#glow)" />
+</svg>

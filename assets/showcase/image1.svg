@@ -1,0 +1,77 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fantasy landscape with mountains and castle -->
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e" />
+      <stop offset="100%" stop-color="#16213e" />
+    </linearGradient>
+    <linearGradient id="mountains" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f3460" />
+      <stop offset="100%" stop-color="#162447" />
+    </linearGradient>
+    <linearGradient id="castle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#6d28d9" />
+    </linearGradient>
+    <radialGradient id="moon" cx="70%" cy="30%" r="5%" fx="70%" fy="30%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#a8b2d1" />
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#sky)" />
+  
+  <!-- Stars -->
+  <g>
+    <circle cx="100" cy="80" r="1.5" fill="white" opacity="0.8" />
+    <circle cx="200" cy="50" r="1" fill="white" opacity="0.6" />
+    <circle cx="300" cy="100" r="1.2" fill="white" opacity="0.7" />
+    <circle cx="400" cy="70" r="1" fill="white" opacity="0.5" />
+    <circle cx="500" cy="120" r="1.3" fill="white" opacity="0.8" />
+    <circle cx="600" cy="60" r="1.1" fill="white" opacity="0.7" />
+    <circle cx="700" cy="90" r="1.4" fill="white" opacity="0.9" />
+    <circle cx="150" cy="150" r="1" fill="white" opacity="0.6" />
+    <circle cx="250" cy="180" r="1.2" fill="white" opacity="0.7" />
+    <circle cx="350" cy="130" r="1.5" fill="white" opacity="0.8" />
+    <circle cx="450" cy="160" r="1.1" fill="white" opacity="0.7" />
+    <circle cx="550" cy="140" r="1" fill="white" opacity="0.5" />
+    <circle cx="650" cy="170" r="1.3" fill="white" opacity="0.8" />
+  </g>
+  
+  <!-- Moon -->
+  <circle cx="650" cy="120" r="40" fill="url(#moon)" filter="url(#glow)" />
+  
+  <!-- Mountains -->
+  <path d="M0,600 L0,350 L100,450 L200,300 L300,400 L400,250 L500,350 L600,200 L700,300 L800,250 L800,600 Z" fill="url(#mountains)" />
+  
+  <!-- Castle -->
+  <g transform="translate(400, 350)" filter="url(#glow)">
+    <!-- Main castle body -->
+    <rect x="-80" y="-100" width="160" height="150" fill="url(#castle)" />
+    
+    <!-- Towers -->
+    <rect x="-100" y="-120" width="30" height="170" fill="url(#castle)" />
+    <rect x="70" y="-120" width="30" height="170" fill="url(#castle)" />
+    
+    <!-- Tower tops -->
+    <polygon points="-100,-120 -85,-150 -70,-120" fill="url(#castle)" />
+    <polygon points="70,-120 85,-150 100,-120" fill="url(#castle)" />
+    
+    <!-- Windows -->
+    <rect x="-60" y="-80" width="20" height="30" fill="#22d3ee" opacity="0.8" />
+    <rect x="-20" y="-80" width="20" height="30" fill="#22d3ee" opacity="0.8" />
+    <rect x="20" y="-80" width="20" height="30" fill="#22d3ee" opacity="0.8" />
+    
+    <!-- Door -->
+    <rect x="-15" y="0" width="30" height="50" fill="#22d3ee" opacity="0.6" />
+    <path d="M-15,0 Q0,-15 15,0" stroke="#22d3ee" stroke-width="2" fill="none" />
+  </g>
+  
+  <!-- Foreground -->
+  <path d="M0,600 L0,450 Q200,430 400,450 Q600,470 800,450 L800,600 Z" fill="#0f172a" />
+</svg>
