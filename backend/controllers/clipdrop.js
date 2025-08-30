@@ -38,6 +38,8 @@ async function generateImage(req, res) {
       // API returns PNG bytes on success
       responseType: 'arraybuffer',
       validateStatus: () => true, // handle non-2xx ourselves
+      timeout: 30000, // 30 second timeout
+      timeoutErrorMessage: 'Request to ClipDrop API timed out after 30 seconds'
     });
 
     const contentType = resp.headers['content-type'] || '';
@@ -55,8 +57,26 @@ async function generateImage(req, res) {
       return res.status(resp.status || 500).json({ error: 'Unexpected API response from ClipDrop' });
     }
   } catch (err) {
-    console.error('ClipDrop error', err?.response?.data || err.message);
-    return res.status(500).json({ error: 'Failed to generate image' });
+    // Check if it's a timeout error
+    if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+      console.error('ClipDrop API timeout error:', err.message);
+      return res.status(504).json({ error: 'Request to image generation service timed out. Please try again.' });
+    }
+    
+    // Network or connection errors
+    if (err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND') {
+      console.error('ClipDrop API connection error:', err.message);
+      return res.status(503).json({ error: 'Unable to connect to image generation service. Please try again later.' });
+    }
+    
+    // Log the detailed error for debugging
+    console.error('ClipDrop error:', err.message, err.code);
+    if (err.response) {
+      console.error('Response status:', err.response.status);
+      console.error('Response data:', err.response.data);
+    }
+    
+    return res.status(500).json({ error: 'Failed to generate image. Please try again later.' });
   }
 }
 

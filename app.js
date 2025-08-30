@@ -157,14 +157,44 @@ function Generator({ onAddImage }) {
     if(!prompt.trim()) return;
     setLoading(true);
     try {
-      const endpoints = ['/api/generate-image', 'http://localhost:5000/api/generate-image'];
+      // Add deployed API endpoint to the list of endpoints to try
+      const currentHost = window.location.hostname;
+      const currentPort = window.location.port;
+      const currentProtocol = window.location.protocol;
+      
+      // Create a list of endpoints to try, prioritizing the current host
+      const endpoints = [
+        `${currentProtocol}//${currentHost}${currentPort ? ':' + currentPort : ''}/api/generate-image`,
+        '/api/generate-image', 
+        'http://localhost:5000/api/generate-image'
+      ];
+      
       let data = null;
       for (const ep of endpoints) {
         try {
-          const res = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt, style, ratio }) });
-          if (res.ok) { data = await res.json(); break; }
-        } catch {}
+          // Create an AbortController to handle timeout
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+          
+          const res = await fetch(ep, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ prompt, style, ratio }),
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId); // Clear the timeout if fetch completes
+          
+          if (res.ok) { 
+            data = await res.json(); 
+            break; 
+          }
+        } catch (fetchError) {
+          console.log(`Fetch error for endpoint ${ep}:`, fetchError.message);
+          // Continue to the next endpoint
+        }
       }
+      
       if (data && data.imageDataUrl) {
         onAddImage({ 
           prompt: prompt.trim(), 
@@ -174,10 +204,15 @@ function Generator({ onAddImage }) {
           ratio
         });
       } else {
-        throw new Error('Backend not available');
+        throw new Error('Backend not available or timed out');
       }
     } catch (e) {
       // Placeholder is used only if backend fails (dev/demo experience)
+      console.error('Backend error:', e.message);
+      
+      // Show a more user-friendly message
+      alert('The image generation service is currently unavailable. Using a placeholder image instead.');
+      
       const placeholder = await createPlaceholder(prompt, style, ratio);
       onAddImage({ 
         prompt: prompt.trim(), 
@@ -187,6 +222,28 @@ function Generator({ onAddImage }) {
         ratio,
         mock: true 
       });
+      
+      // Try to ping the server to check if it's available
+      try {
+        const currentHost = window.location.hostname;
+        const currentPort = window.location.port;
+        const currentProtocol = window.location.protocol;
+        const pingUrl = `${currentProtocol}//${currentHost}${currentPort ? ':' + currentPort : ''}/ping`;
+        
+        fetch(pingUrl, { method: 'GET', timeout: 5000 })
+          .then(response => {
+            if (!response.ok) {
+              console.log('Server ping failed with status:', response.status);
+            } else {
+              console.log('Server ping successful');
+            }
+          })
+          .catch(pingError => {
+            console.log('Server ping error:', pingError.message);
+          });
+      } catch (pingError) {
+        console.error('Error pinging server:', pingError);
+      }
     } finally {
       setLoading(false);
     }
