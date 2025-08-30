@@ -146,15 +146,83 @@ function useLocalStorage(key, initial) {
   return [state, set];
 }
 
+// Notification component for displaying messages
+function Notification({ message, type, onClose }) {
+  useEffect(() => {
+    // Auto-close after 5 seconds
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, [onClose]);
+  
+  return (
+    <div className={`notification ${type}`}>
+      <div className="notification-content">
+        <p>{message}</p>
+        <button className="close-btn" onClick={onClose}>×</button>
+      </div>
+    </div>
+  );
+}
+
 function Generator({ onAddImage }) {
   const [prompt, setPrompt] = useState("");
   const [style, setStyle] = useState("Photorealistic");
   const [ratio, setRatio] = useState("1:1");
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(null);
+  
+  // Function to show notification
+  const showNotification = (message, type = 'error') => {
+    setNotification({ message, type });
+  };
+  
+  // Function to close notification
+  const closeNotification = () => {
+    setNotification(null);
+  };
 
+  // Client-side content filtering to prevent obvious inappropriate requests
+  const containsInappropriateContent = (text) => {
+    const inappropriateTerms = [
+      'kissing', 'nude', 'naked', 'sex', 'sexual', 'porn', 'pornographic',
+      'explicit', 'nsfw', 'xxx', 'adult', 'hentai', 'erotic',
+      'naruto kissing', 'sasuke kissing'
+    ];
+    
+    const lowerText = text.toLowerCase();
+    return inappropriateTerms.some(term => lowerText.includes(term));
+  };
+  
   async function handleGenerate() {
     // Call backend API (never expose API key on frontend). If backend is unreachable, fall back to a placeholder image.
     if(!prompt.trim()) return;
+    
+    // Check for inappropriate content client-side before sending to server
+     if(containsInappropriateContent(prompt)) {
+       setNotification({
+         message: 'Your prompt contains inappropriate content that violates our content policy. Please try a different prompt.',
+         type: 'error'
+       });
+       
+       // Generate inappropriate content placeholder
+       const inappropriatePlaceholder = await createPlaceholder(prompt, style, ratio, true);
+       onAddImage({ 
+         prompt: 'Content Policy Violation', 
+         imageDataUrl: inappropriatePlaceholder, 
+         timestamp: Date.now(),
+         style,
+         ratio,
+         filtered: true
+       });
+       
+       setPrompt(""); // Clear the prompt field
+       setLoading(false);
+       return;
+     }
+    
     setLoading(true);
     try {
       // Add deployed API endpoint to the list of endpoints to try
@@ -185,8 +253,16 @@ function Generator({ onAddImage }) {
           
           clearTimeout(timeoutId); // Clear the timeout if fetch completes
           
-          if (res.ok) { 
-            data = await res.json(); 
+          // Get the response data even if status is not ok (like 403 for filtered content)
+          data = await res.json();
+          
+          // If we got filtered content response, break the loop
+          if (data && data.filtered) {
+            break;
+          }
+          
+          // If response was successful and contains image data, break the loop
+          if (res.ok && data && data.imageDataUrl) { 
             break; 
           }
         } catch (fetchError) {
@@ -203,6 +279,13 @@ function Generator({ onAddImage }) {
           style,
           ratio
         });
+      } else if (data && data.filtered) {
+        // Handle content policy violation with notification instead of alert
+        setNotification({
+          message: 'Your prompt contains inappropriate content that violates our content policy. Please try a different prompt.',
+          type: 'error'
+        });
+        setPrompt(""); // Clear the prompt field
       } else {
         throw new Error('Backend not available or timed out');
       }
@@ -210,8 +293,11 @@ function Generator({ onAddImage }) {
       // Placeholder is used only if backend fails (dev/demo experience)
       console.error('Backend error:', e.message);
       
-      // Show a more user-friendly message
-      alert('The image generation service is currently unavailable. Using a placeholder image instead.');
+      // Show a more user-friendly message with notification
+      setNotification({
+        message: 'The image generation service is currently unavailable. Using a placeholder image instead.',
+        type: 'warning'
+      });
       
       const placeholder = await createPlaceholder(prompt, style, ratio);
       onAddImage({ 
@@ -251,6 +337,13 @@ function Generator({ onAddImage }) {
 
   return (
     <Panel title="Image Generator" right={<span className="badge">ClipDrop-powered</span>}>
+      {notification && (
+        <Notification 
+          message={notification.message} 
+          type={notification.type} 
+          onClose={closeNotification} 
+        />
+      )}
       <div className="controls">
         <input className="input" placeholder="Describe your dream image…" value={prompt} onChange={e=>setPrompt(e.target.value)} />
         <select className="select" value={style} onChange={e=>setStyle(e.target.value)}>
@@ -675,16 +768,24 @@ function formatTimestamp(timestamp) {
   return date.toLocaleDateString();
 }
 
-async function createPlaceholder(prompt, style, ratio) {
+async function createPlaceholder(prompt, style, ratio, isInappropriate = false) {
   // Create a simple gradient card with overlay text as a data URL
   const [w, h] = ratioToSize(ratio);
   const canvas = document.createElement('canvas');
   canvas.width = w; canvas.height = h;
   const ctx = canvas.getContext('2d');
 
+  // Choose gradient based on whether content is inappropriate
   const g = ctx.createLinearGradient(0,0,w,h);
-  g.addColorStop(0, '#7c3aed');
-  g.addColorStop(1, '#22d3ee');
+  if (isInappropriate) {
+    // Red gradient for inappropriate content
+    g.addColorStop(0, '#7f0000');
+    g.addColorStop(1, '#ff0000');
+  } else {
+    // Default gradient for normal content
+    g.addColorStop(0, '#7c3aed');
+    g.addColorStop(1, '#22d3ee');
+  }
   ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
 
   // Overlay
@@ -695,9 +796,19 @@ async function createPlaceholder(prompt, style, ratio) {
   ctx.font = `${Math.max(20, Math.floor(w/24))}px Inter, Arial`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  wrapText(ctx, `${style}`, w/2, h/2 - 24, w*0.82, Math.max(24, Math.floor(w/28)));
-  ctx.font = `${Math.max(16, Math.floor(w/30))}px Inter, Arial`;
-  wrapText(ctx, prompt || 'Your prompt will appear here', w/2, h/2 + 20, w*0.82, Math.max(22, Math.floor(w/32)));
+  
+  if (isInappropriate) {
+    // Display content policy violation message
+    wrapText(ctx, 'Content Policy Violation', w/2, h/2 - 24, w*0.82, Math.max(24, Math.floor(w/28)));
+    ctx.font = `${Math.max(16, Math.floor(w/30))}px Inter, Arial`;
+    wrapText(ctx, 'This prompt contains inappropriate content', w/2, h/2 + 20, w*0.82, Math.max(22, Math.floor(w/32)));
+    wrapText(ctx, 'Please try a different prompt', w/2, h/2 + 60, w*0.82, Math.max(22, Math.floor(w/32)));
+  } else {
+    // Normal placeholder with style and prompt
+    wrapText(ctx, `${style}`, w/2, h/2 - 24, w*0.82, Math.max(24, Math.floor(w/28)));
+    ctx.font = `${Math.max(16, Math.floor(w/30))}px Inter, Arial`;
+    wrapText(ctx, prompt || 'Your prompt will appear here', w/2, h/2 + 20, w*0.82, Math.max(22, Math.floor(w/32)));
+  }
 
   return canvas.toDataURL('image/png');
 }

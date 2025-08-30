@@ -442,6 +442,68 @@ option:checked, option:hover {
   }
 }
 
+/* Notification Component */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 400px;
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+.notification-content {
+  background: var(--surface);
+  color: var(--text);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 4px solid var(--danger);
+}
+
+.notification.error .notification-content {
+  border-left-color: var(--danger);
+}
+
+.notification.success .notification-content {
+  border-left-color: var(--success);
+}
+
+.notification.warning .notification-content {
+  border-left-color: #f59e0b;
+}
+
+.notification.info .notification-content {
+  border-left-color: var(--accent);
+}
+
+.notification p {
+  margin: 0;
+  flex: 1;
+}
+
+.notification .close-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 0 0 10px;
+  margin: 0;
+}
+
+.notification .close-btn:hover {
+  color: var(--text);
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 /* Light theme overrides */
 body.light {
   --bg: #f6f7fb;

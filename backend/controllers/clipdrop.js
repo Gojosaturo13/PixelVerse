@@ -17,6 +17,33 @@ async function generateImage(req, res) {
     if (!prompt || !prompt.trim()) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
+    
+    // Content filtering for inappropriate prompts
+    const bannedTerms = [
+      // Explicit terms
+      'kissing', 'nude', 'naked', 'sex', 'sexual', 'porn', 'pornographic', 
+      'explicit', 'nsfw', 'xxx', 'adult', 'hentai', 'erotic', 
+      'intimate', 'making out', 'intercourse',
+      
+      // Anime character specific inappropriate terms
+      'naruto kissing', 'sasuke kissing', 'anime characters kissing',
+      'anime kiss', 'anime romance', 'anime couple', 'anime love scene',
+      
+      // Additional terms
+      'inappropriate', 'obscene', 'lewd', 'indecent', 'offensive',
+      'vulgar', 'profane', 'suggestive', 'revealing'
+    ];
+    
+    const promptLower = prompt.toLowerCase();
+    for (const term of bannedTerms) {
+      if (promptLower.includes(term)) {
+        console.log(`Content policy violation detected: "${prompt}" contains banned term: ${term}`);
+        return res.status(403).json({ 
+          error: 'Your prompt contains inappropriate content that violates our content policy.', 
+          filtered: true 
+        });
+      }
+    }
 
     // NOTE: ClipDrop text-to-image API currently expects only a 'prompt' field
     // and returns a 1024x1024 PNG image. Custom size/aspect ratio parameters are
